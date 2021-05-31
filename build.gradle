@@ -1,23 +1,70 @@
-plugins {
-	id 'org.springframework.boot' version '2.5.0'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+//Esse processo de build será feito quando formos gerar a imagem do docker
+buildscript {
+    ext {
+        springBootVersion = '2.5.0-SNAPSHOT'
+    }
+
+//repositórios que vamos utilizar
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    //Bibliotecas que serão usadas durante o processo de build
+    dependencies {
+//        Biblioteca do spring boot
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+//        Biblioteca que irá criar tarefas no intellij para poder executar a criação da imagem do docker
+        classpath("gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.22.1")
+    }
 }
 
-group = 'br.com.instadev'
+
+plugins {
+    id 'org.springframework.boot' version '2.5.0'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+//    Aplica o plugin que irá gerar a imagem do docker
+    id 'com.palantir.docker' version '0.22.1'
+}
+
+//Adiciona o id do docker hub
+group = 'fcgeovane'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '16'
 
+//Informações da minha imagem
+bootJar {
+//Nome do meu repositório no docker hub
+    baseName = 'instadev_aws01'
+//Versão dessa minha imagem
+    version = '1.0.0'
+}
+
+//Início da configuração que irá gerar a imagem do docker baseado com as informações do projeto
+task unpack(type: Copy) {
+    dependsOn bootJar
+    from(zipTree(tasks.bootJar.outputs.files.singleFile))
+    into("build/dependency")
+}
+docker {
+    name "${project.group}/${bootJar.baseName}"
+    tags "${bootJar.version}"
+    copySpec.from(tasks.unpack.outputs).into("dependency")
+    buildArgs(['DEPENDENCY': "dependency"])
+}
+// Fim configuração da geração da imagem docker
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
