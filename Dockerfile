@@ -3,8 +3,8 @@
 #Ele contém instruções para gerar imagem e para dizer a partir de qual imagem vamos gerar a nossa imagem
 
 #Essa imagem será gerada a partir da imagem do openjdk:15 que possui tudo que agente precisa para
-#executar a nossa aplicação, inclusive o Java 15
-FROM openjdk:15
+#executar a nossa aplicação, inclusive o Java 16
+FROM openjdk:16
 VOLUME /tmp
 ARG DEPENDENCY=target/dependency
 COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
