@@ -31,7 +31,7 @@ plugins {
 
 //Adiciona o id do docker hub
 group = 'fcgeovane'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.2-SNAPSHOT'
 sourceCompatibility = '16'
 
 //Informações da minha imagem
@@ -39,7 +39,10 @@ bootJar {
 //Nome do meu repositório no docker hub
     baseName = 'instadev_aws01'
 //Versão dessa minha imagem
-    version = '1.0.0'
+    version = '1.1.0'
+    //Classe da minha aplicação que irá executar o app
+    mainClassName = "br.com.instadev.aws_instadev.AwsInstadevApplication"
+
 }
 
 //Início da configuração que irá gerar a imagem do docker baseado com as informações do projeto

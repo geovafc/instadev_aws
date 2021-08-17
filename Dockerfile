@@ -6,7 +6,7 @@
 #executar a nossa aplicação, inclusive o Java 16
 FROM openjdk:16
 VOLUME /tmp
-ARG DEPENDENCY=target/dependency
+ARG DEPENDENCY=build/dependency
 COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY ${DEPENDENCY}/META-INF /app/META-INF
 COPY ${DEPENDENCY}/BOOT-INF/classes /app

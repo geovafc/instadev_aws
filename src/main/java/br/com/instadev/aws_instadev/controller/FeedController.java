@@ -22,4 +22,20 @@ public class FeedController {
 
     }
 
+    @GetMapping("/publicacoes")
+    public ResponseEntity<?> publication() {
+        LOG.info("Feed controller - listando publicacoes");
+
+        return ResponseEntity.ok("Listando publicações: ");
+
+    }
+
+    @GetMapping("/publicacoes2")
+    public ResponseEntity<?> publication2() {
+        LOG.info("Feed controller - listando publicacoes2");
+
+        return ResponseEntity.ok("Listando publicações2: ");
+
+    }
+
 }
