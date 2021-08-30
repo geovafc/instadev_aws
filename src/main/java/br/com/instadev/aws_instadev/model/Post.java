@@ -4,11 +4,11 @@ import javax.persistence.*;
 
 @Table(
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"code"})
+                @UniqueConstraint(columnNames = {"title"})
         }
 )
 @Entity
-public class Feed {
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
