@@ -22,6 +22,8 @@ public class Post {
 
     private long likeCount;
 
+    private long saved;
+
     public long getId() {
         return id;
     }
@@ -54,4 +56,11 @@ public class Post {
         this.likeCount = likeCount;
     }
 
+    public long getSaved() {
+        return saved;
+    }
+
+    public void setSaved(long saved) {
+        this.saved = saved;
+    }
 }
