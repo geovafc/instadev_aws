@@ -1,8 +1,11 @@
 package br.com.instadev.aws_instadev.controller;
 
 
+import br.com.instadev.aws_instadev.enums.EventType;
 import br.com.instadev.aws_instadev.model.Post;
 import br.com.instadev.aws_instadev.repository.PostRepository;
+import br.com.instadev.aws_instadev.service.PostPublisher;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +19,12 @@ import java.util.Optional;
 public class PostController {
 
     private PostRepository postRepository;
+    private PostPublisher postPublisher;
 
     @Autowired
-    public PostController(PostRepository postRepository) {
+    public PostController(PostRepository postRepository, PostPublisher postPublisher) {
         this.postRepository = postRepository;
+        this.postPublisher = postPublisher;
     }
 
     @GetMapping
@@ -39,8 +44,10 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<Post> savePost(
-            @RequestBody Post post) {
+            @RequestBody Post post) throws JsonProcessingException {
         Post postCreated = postRepository.save(post);
+
+        postPublisher.publishPostEvent(postCreated, EventType.POST_CREATED, "geofcmr");
 
         return new ResponseEntity<Post>(postCreated,
                 HttpStatus.CREATED);
@@ -48,11 +55,13 @@ public class PostController {
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<Post> updatePost(
-            @RequestBody Post post, @PathVariable("id") long id) {
+            @RequestBody Post post, @PathVariable("id") long id) throws JsonProcessingException {
         if (postRepository.existsById(id)) {
             post.setId(id);
 
             Post postUpdated = postRepository.save(post);
+
+            postPublisher.publishPostEvent(postUpdated, EventType.POST_UPDATE, "pepe");
 
             return new ResponseEntity<Post>(postUpdated,
                     HttpStatus.OK);
@@ -62,12 +71,14 @@ public class PostController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Post> deletePost(@PathVariable("id") long id) {
+    public ResponseEntity<Post> deletePost(@PathVariable("id") long id) throws JsonProcessingException {
         Optional<Post> optPost = postRepository.findById(id);
         if (optPost.isPresent()) {
             Post post = optPost.get();
 
             postRepository.delete(post);
+
+            postPublisher.publishPostEvent(post, EventType.POST_DELETED, "lulu");
 
             return new ResponseEntity<Post>(post, HttpStatus.OK);
         } else {
