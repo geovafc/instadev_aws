@@ -8,8 +8,11 @@ import com.amazonaws.services.sns.model.Topic;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+//Quando você for executada em um perfil que é diferente de local, então eu executo essa config
+@Profile("!local")
 public class SnsConfig {
 
     @Value("{aws.region}")

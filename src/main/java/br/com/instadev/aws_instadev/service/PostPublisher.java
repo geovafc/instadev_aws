@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class PostPublisher {
     private static final Logger LOG = LoggerFactory.getLogger(PostPublisher.class);
+// Usa o snsClient de acordo com o ambiente. Se for local, usa o da classe SnsCreate se for em dev
+// usa o SnsConfig
     private AmazonSNS snsClient;
     private Topic postEventsTopic;
     private ObjectMapper objectMapper;
