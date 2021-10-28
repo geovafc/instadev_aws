@@ -31,7 +31,7 @@ public class PostPublisher {
     }
 
     public void publishPostEvent(Post post, EventType eventType, String username) throws JsonProcessingException {
-        PostEvent postEvent = buildPostEvent(post);
+        PostEvent postEvent = buildPostEvent(post, username);
 
         Envelope envelope = buildEnvelope(eventType, postEvent);
 
@@ -41,10 +41,10 @@ public class PostPublisher {
         );
     }
 
-    private PostEvent buildPostEvent(Post post) {
+    private PostEvent buildPostEvent(Post post, String username) {
         PostEvent postEvent = new PostEvent();
         postEvent.setPostId(post.getId());
-        postEvent.setUserName(postEvent.getUserName());
+        postEvent.setUserName(username);
         return postEvent;
     }
 
