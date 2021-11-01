@@ -35,10 +35,14 @@ public class PostPublisher {
 
         Envelope envelope = buildEnvelope(eventType, postEvent);
 
-        snsClient.publish(
+        String messageId = snsClient.publish(
                 postEventsTopic.getTopicArn(),
                 objectMapper.writeValueAsString(envelope)
-        );
+        ).getMessageId();
+
+        LOG.info("Post event send - Event {} - PostId {} - MessageId {} - ", envelope.getEventType(), postEvent.getPostId(), messageId);
+
+
     }
 
     private PostEvent buildPostEvent(Post post, String username) {
